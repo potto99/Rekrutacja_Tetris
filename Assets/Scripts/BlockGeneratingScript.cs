@@ -4,6 +4,7 @@ using TMPro;
 public class BlockGeneratingScript : MonoBehaviour
 {
     [SerializeField] Transform[] blockSpawners;
+    [SerializeField] GameObject[] nextBlockPresentation;
     [SerializeField] float spawnInterval;
     [SerializeField] TMP_Text player1PointsWindow;
     [SerializeField] TMP_Text player2PointsWindow;
@@ -19,6 +20,12 @@ public class BlockGeneratingScript : MonoBehaviour
     {
         spawnIntervalStopwatch = spawnInterval;
         nextBlockID = generateRandomBlockID();
+
+        foreach(GameObject nextBlock in nextBlockPresentation)
+        {
+            nextBlock.SetActive(false);
+        }
+
     }
 
     void Update()
@@ -30,7 +37,9 @@ public class BlockGeneratingScript : MonoBehaviour
             {
                 spawnRandomBlock(blockSpawners[0], true);
                 spawnRandomBlock(blockSpawners[1], false);
+                nextBlockPresentation[nextBlockID].SetActive(false);
                 nextBlockID = generateRandomBlockID();
+                nextBlockPresentation[nextBlockID].SetActive(true);
                 spawnIntervalStopwatch = spawnInterval;
             }
         }
@@ -38,7 +47,7 @@ public class BlockGeneratingScript : MonoBehaviour
 
     byte generateRandomBlockID()
     {
-        return (byte)Random.Range(0, blocks.Length - 1);
+        return (byte)Random.Range(0, blocks.Length);
     }
 
     void spawnRandomBlock(Transform blockSpawnPoint, bool isPlayer1Owner)
